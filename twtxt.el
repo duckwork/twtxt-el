@@ -92,6 +92,7 @@
           (insert "\n\n"))
         data)
   (org-mode)
+  (read-only-mode +1)
   (goto-char (point-min)))
 
 (defun twtxt-timeline ()
