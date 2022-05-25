@@ -1,4 +1,4 @@
-;;; twtxt.el --- Client twtxt
+;;; twtxt.el --- Client twtxt -*- lexical-binding: t; -*-
 
 ;; Author: DEADBLACKCLOVER <deadblackclover@protonmail.com>
 ;; Version: 0.1
@@ -29,7 +29,7 @@
 (defcustom twtxt-following nil
   "Following list."
   :type '(repeat (list (string :tag "Name")
-		       (string :tag "URL")))
+                       (string :tag "URL")))
   :group 'twtxt)
 
 (defvar twtxt-timeline-list nil
@@ -41,9 +41,9 @@
 (defun twtxt-get-datetime ()
   "Getting date and time according to RFC 3339 standard."
   (concat (format-time-string "%Y-%m-%dT%T")
-	  ((lambda (x)
-	     (concat (substring x 0 3) ":" (substring x 3 5)))
-	   (format-time-string "%z"))))
+          ((lambda (x)
+             (concat (substring x 0 3) ":" (substring x 3 5)))
+           (format-time-string "%z"))))
 
 (defun twtxt-parse-text (text)
   "Convert TEXT to list post."
@@ -60,8 +60,8 @@
 (defun twtxt-append-username (text)
   "Append username in TEXT."
   (mapcar (lambda (item)
-	    (concat twtxt-username "\t" item))
-	  (twtxt-parse-text text)))
+            (concat twtxt-username "\t" item))
+          (twtxt-parse-text text)))
 
 (defun twtxt-push-text (text)
   "Concatenate the resulting TEXT with the current list."
@@ -70,25 +70,27 @@
 (defun twtxt-fetch (url)
   "Getting text by URL."
   (progn (request url
-	   :parser 'buffer-string
-	   :success (cl-function (lambda
-				   (&key
-				    data
-				    &allow-other-keys)
-				   (twtxt-push-text data))))))
+           :parser 'buffer-string
+           :success (cl-function (lambda
+                                   (&key
+                                    data
+                                    &allow-other-keys)
+                                   (twtxt-push-text data))))))
 
 (defun twtxt-fetch-list ()
   "Getting a list of texts."
   (mapc (lambda (item)
-	  (setq twtxt-username (concat "[[" (car (cdr item)) "][" (car item) "]]"))
-	  (twtxt-fetch (car (cdr item)))) twtxt-following))
+          (setq twtxt-username (concat "[[" (car (cdr item)) "][" (car item) "]]"))
+          (twtxt-fetch (car (cdr item))))
+        twtxt-following))
 
 (defun twtxt-timeline-buffer (data)
   "Create buffer and DATA recording."
   (switch-to-buffer (get-buffer-create "*twtxt-timeline*"))
   (mapc (lambda (item)
-	  (insert (twtxt-replace-tab item))
-	  (insert "\n\n")) data)
+          (insert (twtxt-replace-tab item))
+          (insert "\n\n"))
+        data)
   (org-mode)
   (goto-char (point-min)))
 
