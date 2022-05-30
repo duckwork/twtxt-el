@@ -104,7 +104,7 @@
 
 (defun twtxt-post (post)
   "POST a status update."
-  (interactive "sPost:")
+  (interactive "sPost: ")
   (append-to-file (concat (twtxt-get-datetime) "\t" post "\n") nil twtxt-file))
 
 (provide 'twtxt)
